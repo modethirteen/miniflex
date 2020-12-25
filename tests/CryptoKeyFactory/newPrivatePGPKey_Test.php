@@ -1,0 +1,117 @@
+<?php declare(strict_types=1);
+/**
+ * modethirteen/miniflex
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+namespace modethirteen\Crypto\Tests\CryptoKeyFactory;
+
+use modethirteen\Crypto\CryptoKeyFactory;
+use modethirteen\Crypto\Tests\AbstractCryptoTestCase;
+
+class newPrivatePGPKey_Test extends AbstractCryptoTestCase {
+
+    /**
+     * @test
+     */
+    public function Can_get_private_PGP_key() : void {
+
+        // arrange
+        $factory = new CryptoKeyFactory();
+
+        // act
+        $key = $factory->newPrivatePGPKey(self::getPgpKeyPairSource()->getPrivateKeySourceText());
+
+        // assert
+        static::assertEquals(<<<TEXT
+-----BEGIN PGP PRIVATE KEY BLOCK-----
+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
+jAiXSg18Kt6n86nWIMcKGGi444MyACNA3Aqj=iBp5
+-----END PGP PRIVATE KEY BLOCK-----
+
+TEXT
+, $key->toString());
+        static::assertEquals(<<<TEXT
+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iBp5
+TEXT
+, $key->toText());
+        static::assertEquals('1C63627584B38D8E3DE257C397A625C6D8C7C8F6', $key->getFingerprint());
+        static::assertEquals('PGP PRIVATE KEY BLOCK', $key->getType());
+    }
+
+    /**
+     * @test
+     */
+    public function Can_get_null_private_PGP_key() : void {
+
+        // arrange
+        $factory = new CryptoKeyFactory();
+
+        // act
+        $key = $factory->newPrivatePGPKey('foo');
+
+        // assert
+        static::assertNull($key);
+    }
+}
