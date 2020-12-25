@@ -1,4 +1,4 @@
-# modethirteen/miniflex
+# miniflex
 
 A collection of PHP components to manage cryptographic keys and signatures
 
