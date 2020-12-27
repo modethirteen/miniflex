@@ -1,5 +1,9 @@
 # miniflex
 
+![miniflex](docs/miniflex.jpg)*Source: [Crypto Museum](https://www.cryptomuseum.com/crypto/philips/miniflex/index.htm)*
+
+---
+
 A collection of PHP components to manage cryptographic keys and signatures
 
 [![github.com](https://github.com/modethirteen/miniflex/workflows/build/badge.svg)](https://github.com/modethirteen/miniflex/actions?query=workflow%3Abuild)
