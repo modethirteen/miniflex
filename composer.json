@@ -26,10 +26,7 @@
   "autoload": {
     "psr-4": {
       "modethirteen\\Crypto\\": ["src/"]
-    },
-    "classmap": [
-      "src/Exception/Exceptions.php"
-    ]
+    }
   },
   "autoload-dev": {
     "psr-4": {
