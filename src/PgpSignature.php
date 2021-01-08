@@ -17,6 +17,7 @@
 namespace modethirteen\Crypto;
 
 use gnupg;
+use modethirteen\TypeEx\StringEx;
 
 class PgpSignature implements SignatureInterface {
 
@@ -35,7 +36,9 @@ class PgpSignature implements SignatureInterface {
     public function sign(string $text) : ?string {
         $gnupg = new gnupg();
         $gnupg->addsignkey($this->fingerprint);
-        $result = $gnupg->sign($text);
-        return $result !== false ? $result : null;
+
+        // gnupg::sign returns string|bool, but the docblock only declares string (failing static analysis)
+        $result = StringEx::stringify($gnupg->sign($text));
+        return $result !== 'false' ? $result : null;
     }
 }
