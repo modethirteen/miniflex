@@ -19,7 +19,7 @@ namespace modethirteen\Crypto\Exception;
 use Exception;
 use modethirteen\Crypto\CryptoKeyInterface;
 
-class CryptoServiceCannotGenerateSignedMessageException extends Exception {
+class SignatureFactoryCannotRetrieveFingerprintException extends Exception {
 
     /**
      * @var CryptoKeyInterface
@@ -27,32 +27,17 @@ class CryptoServiceCannotGenerateSignedMessageException extends Exception {
     private $key;
 
     /**
-     * @var string
-     */
-    private $text;
-
-    /**
-     * @param string $text
      * @param CryptoKeyInterface $key
-     * @param string $reason
      */
-    public function __construct(string $text, CryptoKeyInterface $key, string $reason) {
-        parent::__construct("Cannot generate {$key->getType()} signed message: {$reason}");
-        $this->text = $text;
+    public function __construct(CryptoKeyInterface $key) {
+        parent::__construct("Cannot retrieve {$key->getType()} fingerprint to instantiate signature instance");
         $this->key = $key;
     }
 
     /**
      * @return CryptoKeyInterface
      */
-    public function getKey() : CryptoKeyInterface {
+    public function getCryptoKey() : CryptoKeyInterface {
         return $this->key;
-    }
-
-    /**
-     * @return string
-     */
-    public function getText() : string {
-        return $this->text;
     }
 }

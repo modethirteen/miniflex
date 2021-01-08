@@ -21,38 +21,38 @@ interface CryptoKeyInterface {
     /**
      * @return int|null
      */
-    function getExpiration() : ?int;
+    public function getExpiration() : ?int;
 
     /**
      * @return string|null
      */
-    function getFingerprint() : ?string;
+    public function getFingerprint() : ?string;
 
     /**
      * @return string|null
      */
-    function getName() : ?string;
+    public function getName() : ?string;
 
     /**
      * @return string
      */
-    function getType() : string;
+    public function getType() : string;
 
     /**
      * @param string $type
      * @return bool
      */
-    function is(string $type) : bool;
+    public function is(string $type) : bool;
 
     /**
      * @return string
      */
-    function toString() : string;
+    public function toString() : string;
 
     /**
      * Return a raw text representation of the key without header/footer
      *
      * @return string
      */
-    function toText() : string;
+    public function toText() : string;
 }

@@ -16,12 +16,11 @@
  */
 namespace modethirteen\Crypto;
 
-interface CryptoServiceInterface {
+interface SignatureInterface {
 
     /**
      * @param string $text
-     * @param CryptoKeyInterface $key
-     * @return string
+     * @return string|null
      */
-    public function getSignedMessage(string $text, CryptoKeyInterface $key) : string;
+    public function sign(string $text) : ?string;
 }

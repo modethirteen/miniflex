@@ -16,12 +16,26 @@
  */
 namespace modethirteen\Crypto;
 
-interface CryptoServiceInterface {
+use gnupg;
+
+class PgpSignature implements SignatureInterface {
 
     /**
-     * @param string $text
-     * @param CryptoKeyInterface $key
-     * @return string
+     * @var string
      */
-    public function getSignedMessage(string $text, CryptoKeyInterface $key) : string;
+    private $fingerprint;
+
+    /**
+     * @param string $fingerprint - PGP private key fingerprint
+     */
+    public function __construct(string $fingerprint) {
+        $this->fingerprint = $fingerprint;
+    }
+
+    public function sign(string $text) : ?string {
+        $gnupg = new gnupg();
+        $gnupg->addsignkey($this->fingerprint);
+        $result = $gnupg->sign($text);
+        return $result !== false ? $result : null;
+    }
 }

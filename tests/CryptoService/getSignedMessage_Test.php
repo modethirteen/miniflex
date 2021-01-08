@@ -17,11 +17,11 @@
 namespace modethirteen\Crypto\Tests\CryptoService;
 
 use gnupg;
-use modethirteen\Crypto\CryptoKey;
 use modethirteen\Crypto\CryptoKeyFactory;
 use modethirteen\Crypto\CryptoKeyInterface;
 use modethirteen\Crypto\CryptoService;
 use modethirteen\Crypto\Exception\CryptoServiceCannotGenerateSignedMessageException;
+use modethirteen\Crypto\PgpSignatureFactory;
 use modethirteen\Crypto\Tests\AbstractCryptoTestCase;
 
 class getSignedMessage_Test extends AbstractCryptoTestCase {
@@ -48,7 +48,7 @@ class getSignedMessage_Test extends AbstractCryptoTestCase {
         $message = <<<TEXT
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 TEXT;
-        $service = new CryptoService();
+        $service = new CryptoService(new PgpSignatureFactory());
 
         // act
         $result = $service->getSignedMessage($message, $key);
@@ -71,29 +71,6 @@ TEXT;
     }
 
     /**
-     * @test
-     * @throws CryptoServiceCannotGenerateSignedMessageException
-     */
-    public function Can_handle_no_pgp_fingerprint() : void {
-
-        // assert
-        static::expectException(CryptoServiceCannotGenerateSignedMessageException::class);
-
-        // arrange
-        $key = (new CryptoKeyFactory())->newPrivatePGPKey(self::getPgpKeyPairSource()->getPrivateKeySourceText());
-        if($key instanceof CryptoKey) {
-            $key = $key->withFingerprint('');
-        }
-        $message = <<<TEXT
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-TEXT;
-        $service = new CryptoService();
-
-        // act
-        $service->getSignedMessage($message, $key);
-    }
-
-    /**
      * @dataProvider nonImplementedCryptoKey_Provider
      * @test
      * @param CryptoKeyInterface $nonImplementedCryptoKey
@@ -108,7 +85,7 @@ TEXT;
         $message = <<<TEXT
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 TEXT;
-        $service = new CryptoService();
+        $service = new CryptoService(new PgpSignatureFactory());
 
         // act
         $service->getSignedMessage($message, $nonImplementedCryptoKey);

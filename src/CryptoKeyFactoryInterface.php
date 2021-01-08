@@ -22,23 +22,23 @@ interface CryptoKeyFactoryInterface {
      * @param string $text
      * @return CryptoKeyInterface|null
      */
-    function newPrivatePEMKey(string $text) : ?CryptoKeyInterface;
+    public function newPrivatePEMKey(string $text) : ?CryptoKeyInterface;
 
     /**
      * @param string $text
      * @return CryptoKeyInterface|null
      */
-    function newPrivatePGPKey(string $text) : ?CryptoKeyInterface;
+    public function newPrivatePGPKey(string $text) : ?CryptoKeyInterface;
 
     /**
      * @param string $text
      * @return CryptoKeyInterface|null
      */
-    function newPublicPGPKey(string $text) : ?CryptoKeyInterface;
+    public function newPublicPGPKey(string $text) : ?CryptoKeyInterface;
 
     /**
      * @param string $text
      * @return CryptoKeyInterface|null
      */
-    function newX509Certificate(string $text) : ?CryptoKeyInterface;
+    public function newX509Certificate(string $text) : ?CryptoKeyInterface;
 }

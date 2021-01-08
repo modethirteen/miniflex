@@ -16,11 +16,21 @@
  */
 namespace modethirteen\Crypto;
 
-use gnupg;
 use modethirteen\Crypto\Exception\CryptoServiceCannotGenerateSignedMessageException;
-use modethirteen\TypeEx\StringEx;
 
 class CryptoService implements CryptoServiceInterface {
+
+    /**
+     * @var SignatureFactoryInterface
+     */
+    private $pgpSignatureFactory;
+
+    /**
+     * @param SignatureFactoryInterface $pgpSignatureFactory
+     */
+    public function __construct(SignatureFactoryInterface $pgpSignatureFactory) {
+        $this->pgpSignatureFactory = $pgpSignatureFactory;
+    }
 
     /**
      * {@inheritDoc}
@@ -29,16 +39,8 @@ class CryptoService implements CryptoServiceInterface {
     public function getSignedMessage(string $text, CryptoKeyInterface $key) : string {
         switch($key->getType()) {
             case CryptoKey::TYPE_PGP_PRIVATE_KEY_BLOCK:
-                $fingerprint = $key->getFingerprint();
-                if(StringEx::isNullOrEmpty($fingerprint)) {
-                    throw new CryptoServiceCannotGenerateSignedMessageException($text, $key, 'Cannot retrieve fingerprint from PGP private key');
-                }
-                $gnupg = new gnupg();
-                $gnupg->addsignkey($fingerprint);
-
-                // gnupg::sign returns string|bool, but the docblock only declares string (failing static analysis)
-                $result = StringEx::stringify($gnupg->sign($text));
-                if($result === 'false') {
+                $result = $this->pgpSignatureFactory->newSignature($key)->sign($text);
+                if($result === null) {
                     throw new CryptoServiceCannotGenerateSignedMessageException($text, $key, 'Signature failed');
                 }
                 return $result;

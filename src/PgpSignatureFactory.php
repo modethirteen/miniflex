@@ -16,12 +16,21 @@
  */
 namespace modethirteen\Crypto;
 
-interface CryptoServiceInterface {
+use modethirteen\Crypto\Exception\SignatureFactoryCannotRetrieveFingerprintException;
+use modethirteen\TypeEx\StringEx;
+
+class PgpSignatureFactory implements SignatureFactoryInterface {
 
     /**
-     * @param string $text
      * @param CryptoKeyInterface $key
-     * @return string
+     * @return SignatureInterface
+     * @throws SignatureFactoryCannotRetrieveFingerprintException
      */
-    public function getSignedMessage(string $text, CryptoKeyInterface $key) : string;
+    public function newSignature(CryptoKeyInterface $key) : SignatureInterface {
+        $fingerprint = $key->getFingerprint();
+        if(StringEx::isNullOrEmpty($fingerprint)) {
+            throw new SignatureFactoryCannotRetrieveFingerprintException($key);
+        }
+        return new PgpSignature($fingerprint);
+    }
 }
