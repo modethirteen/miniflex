@@ -57,6 +57,9 @@ class RsaCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
             throw new CryptoKeyFactoryCannotConstructCryptoKeyException('failed to generate private key: ' . openssl_error_string());
         }
         $publicKeyData = openssl_pkey_get_details($rsa);
+        if($publicKeyData === false) {
+            throw new CryptoKeyFactoryCannotConstructCryptoKeyException('failed to extract public key: ' . openssl_error_string());
+        }
         return (new ImportCryptoKeyPairFactory($privateKeyText, isset($publicKeyData['key']) ? $publicKeyData['key'] : ''))
             ->withDigestAlgorithm($this->algo)
             ->newCryptoKeyPair();

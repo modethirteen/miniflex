@@ -58,7 +58,7 @@ class X509CertificateBuilder {
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     public function toDistinguishedNamesArray() : array {
         return $this->data;
