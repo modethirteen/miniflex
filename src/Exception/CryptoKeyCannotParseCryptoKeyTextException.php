@@ -14,45 +14,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\Crypto;
+namespace modethirteen\Crypto\Exception;
 
-interface CryptoKeyInterface {
+use Exception;
 
-    /**
-     * @return int|null
-     */
-    public function getExpiration() : ?int;
+class CryptoKeyCannotParseCryptoKeyTextException extends Exception {
 
     /**
-     * @return string|null
+     * @var string
      */
-    public function getFingerprint() : ?string;
+    private $error;
 
     /**
-     * @return string|null
+     * @var string
      */
-    public function getName() : ?string;
+    private $text;
 
     /**
-     * @return string
+     * @param string $error - the specific error or reason the key pair cannot be instantiated
+     * @param string $text
      */
-    public function getFormat() : string;
-
-    /**
-     * @param string $type
-     * @return bool
-     */
-    public function is(string $type) : bool;
+    public function __construct(string $error, string $text) {
+        parent::__construct("Cannot parse cryptographic key text, {$error}");
+        $this->error = $error;
+        $this->text = $text;
+    }
 
     /**
      * @return string
      */
-    public function toString() : string;
+    public function getError() : string {
+        return $this->error;
+    }
 
     /**
-     * Return a raw text representation of the key without header/footer
-     *
      * @return string
      */
-    public function toText() : string;
+    public function getCryptoKeyText() : string {
+        return $this->text;
+    }
 }

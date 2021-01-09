@@ -14,14 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\Crypto;
+namespace modethirteen\Crypto\Exception;
 
-interface CryptoServiceInterface {
+use Exception;
 
-    /**
-     * @param string $text
-     * @param CryptoKeyInterface $key
-     * @return string
-     */
-    public function getSignedMessage(string $text, CryptoKeyInterface $key) : string;
+class NotSupportedException extends Exception {
+
+    public function __construct() {
+        parent::__construct('Not supported');
+    }
 }

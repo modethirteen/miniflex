@@ -18,42 +18,13 @@ namespace modethirteen\Crypto\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-interface PhpKeyPairSourceInterface {
-
-    /**
-     * @return string
-     */
-    function getPrivateKeySourceText() : string;
-
-    /**
-     * @return string
-     */
-    function getPublicKeySourceText() : string;
-}
-
 abstract class AbstractCryptoTestCase extends TestCase {
 
     /**
      * @return string
      */
-    protected static function getPrivatePEMKeySourceText() : string {
+    protected static function getPgpPrivateKeyText() : string {
         return <<<TEXT
------BEGIN RSA PRIVATE KEY-----
-MIIEpAIBAAKCAQEAn5Jt/AmA9VdU4O8iEGrD7xmPPe5pvgCmop9/W/lsrr+m7UCj klbb8cjxriKwrlrhJBZPFlETJAiqy7u4Jbzr1cluMwO3Z8kBBlwb4mhvTgu9ZPpC A/V3FTVeNz/yOiWbNhi2YmTunozVZy3L2iBWoBz/JSlvG0ktoDm5uMREw49XTiwu jKufzzU6Dbvs7MMTodIY7BbzedELOz8tyr92ymiQbUGW9kkxAPWQZC8+h2uNCQDN Y7EvUVT5qD2Q89RdGEG4ZeYnv8VsULEbD6ZYW5lNa3HnzoKjtVIZuaBbT8sdWB8G /w8gkvScAgcdl/cR7ix2y7kTYbSmTsBotLfsgQIDAQABAoIBAHARe/L1jb9A3Vi4 OblD8mWbEtHQ/iy18lHmKKEktKKp8QdRTU+6dvABS1McA+//3XzluheXSxUUjTdW mEbQvuS/egiUBJv8PB8GU4MYC4vJjPM9G14CZ+baO1gcLfeOb8p3YqgJ8NgjWsED FdcUvSHoG30y81g7dbLAt+G+3fhlOER6LcFv7zbLbWAfj9LBNghR77fMkf/1TZfR cTr0iYADg7FI7A9WJplNx681GQ7JrsVJPJyy3KoL+gWMIygR540l8CY597isLi1f HlcFRmJNjCfHcKYZnL5Iqx+v9v/YVzxfF6UsP8ZOAOgUsqjyS5C7hEjtWee3h7uG gO4yIR0CgYEA0M2onHhM6SabVrSJuC/7rsjlnh3PIHqa9F2kAx96bWwZWZzxktEk kQmX2vH30LnpmSW1VykWHFy93yqKlRgmPZJXDTVXr+UivPFDiU1nDA/Gv+OF1Fpq nvAfKcs0szMaYLNAfJX2c4jlIe9FoPijqLeN8hh2tyX2+OeDLaQwOzMCgYEAw6QD bt0JLDCSFAHDN7Bl1TlBxxEzS9D3r8vistzC34zyQkLm7T6+Wh9PVMj5GxMtl2jS DlwdJ6yZLBHGLgUtdHy5wVeOaEQRg2tNFtPlwP/aJd766EdS/5qUvIDnupnfEUgn wKef3Ad22aH5BM8KxN/KhkFO1jCewvMxezkumXsCgYEAw/eAu/mcFWYKfIHMj3VZ PV2HQ7KuZskrDRWljNjKSlAeKqDFiQmIzCa4wuA9uUQDHZzqaPdCrTPNb9m5Xtzf ZwIleVwLBCaFR9cXj5F5mTRlUEr1m6uQTcMHPG5e86COrRsO9t64Aw8EHak3LDCv SPWc3w5evN2AwXJnBzsFmUkCgYB8fRMKKnA5xDZPsMdt2jsSMLrgVtuTNMdG/6+j LMJ7yY4mB7g14qTxZ9btFm0cg1mRbMutA4QxyKw21KCMjBLeercghfxB8H5MZ6zI B9G8u5EuY/K4dxojN1PJlyTdIihFMOrKtl8MfVttJJn2K2Co4dZXE5t8w7diSamE xWAXnQKBgQCZuVZk+Lb46yjUN4ON/5f5tsRLTY0qbF75CCUqJbDu8Nws+rWe+TUI wgPgIy18xlfhD2ZVFvPGNzhSn+jPZ5lxrW26zq1bQurQv4hmH17MQCkXcdQmGEtE jGTyhXmuQm7YPbwiK0izLJjOLYQop0hBdqt+jtcNqPKd7XOY4OEmNA==
------END RSA PRIVATE KEY-----
-TEXT;
-    }
-
-    /**
-     * @return PhpKeyPairSourceInterface
-     */
-    protected static function getPgpKeyPairSource() : object {
-        return new class() implements PhpKeyPairSourceInterface {
-
-            /**
-             * @var string
-             */
-            private static $privateKeySourceText = <<<TEXT
 -----BEGIN PGP PRIVATE KEY BLOCK-----
 
 lQOYBF7pY2YBCADNK7wZgyxSbj4hd6uJ3rEk4pSwIxCxDBdi95NTXX8nAh5AuTyb
@@ -112,10 +83,13 @@ jAiXSg18Kt6n86nWIMcKGGi444MyACNA3Aqj
 =iBp5
 -----END PGP PRIVATE KEY BLOCK-----
 TEXT;
-            /**
-             * @var string
-             */
-            private static $publicKeySourceText = <<<TEXT
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getPgpPublicKeyText() : string {
+        return <<<TEXT
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQENBF7pY2YBCADNK7wZgyxSbj4hd6uJ3rEk4pSwIxCxDBdi95NTXX8nAh5AuTyb
@@ -147,46 +121,87 @@ Kt6n86nWIMcKGGi444MyACNA3Aqj
 =wRb+
 -----END PGP PUBLIC KEY BLOCK-----
 TEXT;
-
-            public function getPrivateKeySourceText() : string {
-                return self::$privateKeySourceText;
-            }
-
-            public function getPublicKeySourceText() : string {
-                return self::$publicKeySourceText;
-            }
-        };
     }
 
     /**
      * @return string
      */
-    protected static function getX509CertificateSourceText() : string {
+    protected static function getRsaPrivateKeyText() : string {
         return <<<TEXT
------BEGIN CERTIFICATE-----
+-----BEGIN PRIVATE KEY-----
+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
+tPlHkivcg04WSgKlb4/QgkGmoji37Q==
+-----END PRIVATE KEY-----
+TEXT;
+    }
 
-MIIDvDCCAqQCCQCZovg3nWlgVDANBgkqhkiG9w0BAQsFADCBnzELMAkGA1UEBhMC
-SUUxDTALBgNVBAgMBENvcmsxDTALBgNVBAcMBENvcmsxGTAXBgNVBAoMEE1pbmRU
-b3VjaERhcnJhZ2gxEDAOBgNVBAsMB1N1cHBvcnQxHjAcBgNVBAMMFWRhcnJhZ2hz
-Lm1pbmR0b3VjaC51czElMCMGCSqGSIb3DQEJARYWZGFycmFnaHNAbWluZHRvdWNo
-LmNvbTAeFw0xOTAzMTQxMDUwNDJaFw0yMDAzMTMxMDUwNDJaMIGfMQswCQYDVQQG
-EwJJRTENMAsGA1UECAwEQ29yazENMAsGA1UEBwwEQ29yazEZMBcGA1UECgwQTWlu
-ZFRvdWNoRGFycmFnaDEQMA4GA1UECwwHU3VwcG9ydDEeMBwGA1UEAwwVZGFycmFn
-aHMubWluZHRvdWNoLnVzMSUwIwYJKoZIhvcNAQkBFhZkYXJyYWdoc0BtaW5kdG91
-Y2guY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAn5Jt/AmA9VdU
-4O8iEGrD7xmPPe5pvgCmop9/W/lsrr+m7UCjklbb8cjxriKwrlrhJBZPFlETJAiq
-y7u4Jbzr1cluMwO3Z8kBBlwb4mhvTgu9ZPpCA/V3FTVeNz/yOiWbNhi2YmTunozV
-Zy3L2iBWoBz/JSlvG0ktoDm5uMREw49XTiwujKufzzU6Dbvs7MMTodIY7BbzedEL
-Oz8tyr92ymiQbUGW9kkxAPWQZC8+h2uNCQDNY7EvUVT5qD2Q89RdGEG4ZeYnv8Vs
-ULEbD6ZYW5lNa3HnzoKjtVIZuaBbT8sdWB8G/w8gkvScAgcdl/cR7ix2y7kTYbSm
-TsBotLfsgQIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQAYytRVlEuO3bSY/y63cAHh
-ioq6YrYM9LrPEY4S3lIuULEniGqwHt/RlCaAk5GA3fsn+Z9Sh55eS3TsLyEmDpuX
-XyjZludpuh8AcVItpQKamkSycgMnlpx/yNg5yThRY1PYctDDwN+N+WbR8cwws8dt
-RwV7jW53jJEPK0dX/Rd8Uc1753csrT6ZXZDUMg/jpSaqw1hKuVYTDgkxM8NJJHbA
-prmdEeunjNGwsxyhk1HAHY4SLtTMfHylGfniebrf2r8VvxD1McOAhnWq9U67nbte
-mcCzFF4TSb7cIbuqFW8gzcMrAWJOKnVwIARCNaE3rlfZ5h1mxI8/Rdoa+WgFsqXi
-
------END CERTIFICATE-----
+    /**
+     * @return string
+     */
+    protected static function getRsaPublicKeyText() : string {
+        return <<<TEXT
+-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA0qJQSCAO9IF4pPa4r0Kk
++RpYoDaUdCgVqQe9g/sq5w99v8YemyYyIT3hWDoPK/Hk0Afx8iR4RjHza/r+81av
+7VO9rIdSeJwOV+ttCfFiz9jkqMp6/ToktpaPXZaBts27mtguwecEklOG12UygzJ6
+Rro1peiSfrt2lIhFEQ5Fyyt0f6uFoh9v7JLogLph4epmxoEy3RFA7hWIOJeleNnH
+QUVkYZPXCBTjtnvqiTj7BY8lbTGSjaB39S7jwL49UxnJzVmD+hoObjIt/7YPVGg6
+2aq/G0JgoLbQc029Oq/EgeyyjkhjWBzz+DT1xPMniUMUVgUZH73avIFW+8S7i+Sb
+L4xQOddo0oucEjdQm9gQh7wuvRLQbdEsdQSO1ejCOo/bcWwBaPDwgoS+w7MNLn5V
+nIw8O84zUFoBs7ku2ogiro/z1SvdjhPv3sOJozoHlRVzgFQsdHSbXUcTAUpTP2gR
+QTZSN7Se/rryeZVZo7FF1nhOB6knkFyVFrgNjReuTqY0MZZq3U6uqZ8wzQqnSVGM
+BmY74ynfySU3L+EjYsi6ne1NNoK9wcYjrmyxDcH32CVvj0fSh/pqWY+grrpVe4zS
+G68p5SUj8Vz/4vdu7r9io+87hO5fA5Yfratv2Lr53ZiILdPe33chfNkvLXFNbmzW
+P0H7G/P8THN5qTFESKWEk/ECAwEAAQ==
+-----END PUBLIC KEY-----
 TEXT;
     }
 }

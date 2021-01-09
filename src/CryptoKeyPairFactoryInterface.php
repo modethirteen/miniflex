@@ -16,11 +16,10 @@
  */
 namespace modethirteen\Crypto;
 
-interface SignatureInterface {
+interface CryptoKeyPairFactoryInterface {
 
     /**
-     * @param string $text
-     * @return string|null
+     * @return CryptoKeyPair
      */
-    public function sign(string $text) : ?string;
+    public function newCryptoKeyPair() : CryptoKeyPair;
 }

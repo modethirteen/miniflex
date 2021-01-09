@@ -14,13 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\Crypto;
+namespace modethirteen\Crypto\Exception;
 
-interface SignatureFactoryInterface {
+use Exception;
+
+class CryptoKeyFactoryCannotConstructCryptoKeyException extends Exception {
 
     /**
-     * @param CryptoKeyInterface $key
-     * @return SignatureInterface
+     * @var string
      */
-    public function newSignature(CryptoKeyInterface $key) : SignatureInterface;
+    private $error;
+
+    /**
+     * @param string $error - the specific error or reason the key pair cannot be instantiated
+     */
+    public function __construct(string $error) {
+        parent::__construct("Cannot construct the cryptographic key pair, {$error}");
+        $this->error = $error;
+    }
+
+    /**
+     * @return string
+     */
+    public function getError() : string {
+        return $this->error;
+    }
 }

@@ -16,12 +16,39 @@
  */
 namespace modethirteen\Crypto;
 
+use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
+use modethirteen\TypeEx\StringEx;
+
 class CryptoKey implements CryptoKeyInterface {
-    const TYPE_PGP_PRIVATE_KEY_BLOCK = 'PGP PRIVATE KEY BLOCK';
-    const TYPE_PGP_PUBLIC_KEY_BLOCK = 'PGP PUBLIC KEY BLOCK';
-    const TYPE_CERTIFICATE = 'CERTIFICATE';
-    const TYPE_PRIVATE_KEY = 'PRIVATE KEY';
-    const TYPE_RSA_PRIVATE_KEY = 'RSA PRIVATE KEY';
+    const DIGEST_ALGORITHM = 'sha256';
+    const FORMAT_CERTIFICATE = 'CERTIFICATE';
+    const FORMAT_PGP_PRIVATE_KEY_BLOCK = 'PGP PRIVATE KEY BLOCK';
+    const FORMAT_PGP_PUBLIC_KEY_BLOCK = 'PGP PUBLIC KEY BLOCK';
+    const FORMAT_PRIVATE_KEY = 'PRIVATE KEY';
+    const FORMAT_PUBLIC_KEY = 'PUBLIC KEY';
+    const FORMAT_RSA_PRIVATE_KEY = 'RSA PRIVATE KEY';
+    const FORMAT_RSA_PUBLIC_KEY = 'RSA PUBLIC KEY';
+
+    /**
+     * @var string[]
+     */
+    private static $supportedFormats = [
+        self::FORMAT_CERTIFICATE,
+        self::FORMAT_PGP_PRIVATE_KEY_BLOCK,
+        self::FORMAT_PGP_PUBLIC_KEY_BLOCK,
+        self::FORMAT_PRIVATE_KEY,
+        self::FORMAT_PUBLIC_KEY,
+        self::FORMAT_RSA_PRIVATE_KEY,
+        self::FORMAT_RSA_PUBLIC_KEY
+    ];
+
+    /**
+     * @param string $format - key block format (CERTIFICATE, PGP PUBLIC KEY BLOCK, ...)
+     * @return bool
+     */
+    public static function isSupportedCryptoKeyFormat(string $format) : bool {
+        return in_array($format, self::$supportedFormats);
+    }
 
     /**
      * @var int|null
@@ -36,7 +63,12 @@ class CryptoKey implements CryptoKeyInterface {
     /**
      * @var string
      */
-    private $formatted;
+    private $format;
+
+    /**
+     * @var string
+     */
+    private $normalized;
 
     /**
      * @var string|null
@@ -49,19 +81,25 @@ class CryptoKey implements CryptoKeyInterface {
     private $text;
 
     /**
-     * @var string
+     * @param string $text - PEM key text
+     * @throws CryptoKeyCannotParseCryptoKeyTextException
      */
-    private $type;
-
-    /**
-     * @param string $type - key block type (CERTIFICATE, PGP PUBLIC KEY BLOCK, ...)
-     * @param string $formatted - formatted key with header/footer
-     * @param string $text - raw text representation of key
-     */
-    public function __construct(string $type, string $formatted, string $text) {
-        $this->type = $type;
-        $this->formatted = $formatted;
+    public function __construct(string $text) {
+        if(preg_match('/-----BEGIN (.+?)-----/', $text, $matches)) {
+            $this->format = isset($matches[1]) ? $matches[1] : null;
+        }
+        if(!self::isSupportedCryptoKeyFormat($this->format)) {
+            throw new CryptoKeyCannotParseCryptoKeyTextException('invalid key block format', $text);
+        }
+        $text = str_replace(["\x0D", "\r", "\n"], '', $text);
+        if(!StringEx::isNullOrEmpty($text)) {
+            $text = preg_replace('/-----(BEGIN|END) .+?-----/', '', $text);
+            $text = str_replace(' ', '', $text);
+        }
         $this->text = $text;
+
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
+        $this->normalized =  "-----BEGIN {$this->format}-----\n" . chunk_split($this->text, 64, "\n") . "-----END {$this->format}-----\n";
     }
 
     public function __toString() : string {
@@ -80,16 +118,16 @@ class CryptoKey implements CryptoKeyInterface {
         return $this->name;
     }
 
-    public function getType() : string {
-        return $this->type;
+    public function getFormat() : string {
+        return $this->format;
     }
 
     public function is(string $type) : bool {
-        return $type === $this->type;
+        return $type === $this->format;
     }
 
     public function toString() : string {
-        return $this->formatted;
+        return $this->normalized;
     }
 
     public function toText() : string {

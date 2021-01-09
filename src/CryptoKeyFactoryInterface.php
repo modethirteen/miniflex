@@ -19,26 +19,7 @@ namespace modethirteen\Crypto;
 interface CryptoKeyFactoryInterface {
 
     /**
-     * @param string $text
-     * @return CryptoKeyInterface|null
+     * @return CryptoKeyInterface
      */
-    public function newPrivatePEMKey(string $text) : ?CryptoKeyInterface;
-
-    /**
-     * @param string $text
-     * @return CryptoKeyInterface|null
-     */
-    public function newPrivatePGPKey(string $text) : ?CryptoKeyInterface;
-
-    /**
-     * @param string $text
-     * @return CryptoKeyInterface|null
-     */
-    public function newPublicPGPKey(string $text) : ?CryptoKeyInterface;
-
-    /**
-     * @param string $text
-     * @return CryptoKeyInterface|null
-     */
-    public function newX509Certificate(string $text) : ?CryptoKeyInterface;
+    public function newCryptoKey() : CryptoKeyInterface;
 }

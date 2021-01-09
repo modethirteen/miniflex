@@ -19,7 +19,7 @@ namespace modethirteen\Crypto\Exception;
 use Exception;
 use modethirteen\Crypto\CryptoKeyInterface;
 
-class SignatureFactoryCannotRetrieveFingerprintException extends Exception {
+class CryptoKeySignerException extends Exception {
 
     /**
      * @var CryptoKeyInterface
@@ -28,9 +28,10 @@ class SignatureFactoryCannotRetrieveFingerprintException extends Exception {
 
     /**
      * @param CryptoKeyInterface $key
+     * @param string $error
      */
-    public function __construct(CryptoKeyInterface $key) {
-        parent::__construct("Cannot retrieve {$key->getType()} fingerprint to instantiate signature instance");
+    public function __construct(CryptoKeyInterface $key, string $error) {
+        parent::__construct($error);
         $this->key = $key;
     }
 

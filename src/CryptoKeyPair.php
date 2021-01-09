@@ -14,45 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\Crypto\Exception;
+namespace modethirteen\Crypto;
 
-use Exception;
-use modethirteen\Crypto\CryptoKeyInterface;
-
-class CryptoServiceCannotGenerateSignedMessageException extends Exception {
+class CryptoKeyPair {
 
     /**
      * @var CryptoKeyInterface
      */
-    private $key;
+    private $privateKey;
 
     /**
-     * @var string
+     * @var CryptoKeyInterface
      */
-    private $text;
+    private $publicKey;
 
     /**
-     * @param string $text
-     * @param CryptoKeyInterface $key
-     * @param string $reason
+     * @param CryptoKeyInterface $privateKey
+     * @param CryptoKeyInterface $publicKey
      */
-    public function __construct(string $text, CryptoKeyInterface $key, string $reason) {
-        parent::__construct("Cannot generate {$key->getType()} signed message: {$reason}");
-        $this->text = $text;
-        $this->key = $key;
+    public function __construct(CryptoKeyInterface $privateKey, CryptoKeyInterface $publicKey) {
+        $this->privateKey = $privateKey;
+        $this->publicKey = $publicKey;
     }
 
     /**
      * @return CryptoKeyInterface
      */
-    public function getKey() : CryptoKeyInterface {
-        return $this->key;
+    public function getPrivateKey() : CryptoKeyInterface {
+        return $this->privateKey;
     }
 
     /**
-     * @return string
+     * @return CryptoKeyInterface
      */
-    public function getText() : string {
-        return $this->text;
+    public function getPublicKey() : CryptoKeyInterface {
+        return $this->publicKey;
     }
 }

@@ -17,28 +17,44 @@
 namespace modethirteen\Crypto;
 
 use gnupg;
+use modethirteen\Crypto\Exception\CryptoKeySignerException;
 use modethirteen\TypeEx\StringEx;
 
-class PgpSignature implements SignatureInterface {
+class PgpMessageSigner implements SignerInterface {
+
+    /**
+     * @var CryptoKeyInterface
+     */
+    private $key;
 
     /**
      * @var string
      */
-    private $fingerprint;
+    private $message;
 
     /**
-     * @param string $fingerprint - PGP private key fingerprint
+     * @param CryptoKeyInterface $key - PGP private key
+     * @param string $message - message to sign
      */
-    public function __construct(string $fingerprint) {
-        $this->fingerprint = $fingerprint;
+    public function __construct(CryptoKeyInterface $key, string $message) {
+        $this->key = $key;
+        $this->message = $message;
     }
 
-    public function sign(string $text) : ?string {
+    /**
+     * {@inheritDoc}
+     * @throws CryptoKeySignerException
+     */
+    public function sign() : ?string {
+        $fingerprint = $this->key->getFingerprint();
+        if(StringEx::isNullOrEmpty($fingerprint)) {
+            throw new CryptoKeySignerException($this->key, 'Cannot retrieve PGP private key fingerprint to sign message');
+        }
         $gnupg = new gnupg();
-        $gnupg->addsignkey($this->fingerprint);
+        $gnupg->addsignkey($fingerprint);
 
         // gnupg::sign returns string|bool, but the docblock only declares string (failing static analysis)
-        $result = StringEx::stringify($gnupg->sign($text));
+        $result = StringEx::stringify($gnupg->sign($this->message));
         return $result !== 'false' ? $result : null;
     }
 }
