@@ -19,7 +19,6 @@ namespace modethirteen\Crypto;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
 use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeySignerException;
-use modethirteen\Crypto\Exception\NotSupportedException;
 
 class X509CertificateBuilder {
 
@@ -69,7 +68,6 @@ class X509CertificateBuilder {
      * @throws CryptoKeyCannotParseCryptoKeyTextException
      * @throws CryptoKeyFactoryCannotConstructCryptoKeyException
      * @throws CryptoKeySignerException
-     * @throws NotSupportedException
      */
     public function toSignedCryptoKey() : CryptoKeyInterface {
         return (new ImportCryptoKeyFactory($this->signature->sign()))

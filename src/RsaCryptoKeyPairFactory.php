@@ -1,6 +1,4 @@
-<?php
-/** @noinspection DuplicatedCode */
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * modethirteen/miniflex
  *
@@ -20,7 +18,6 @@ namespace modethirteen\Crypto;
 
 use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
-use modethirteen\Crypto\Exception\NotSupportedException;
 
 class RsaCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
 
@@ -38,7 +35,6 @@ class RsaCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
      * {@inheritDoc}
      * @throws CryptoKeyCannotParseCryptoKeyTextException
      * @throws CryptoKeyFactoryCannotConstructCryptoKeyException
-     * @throws NotSupportedException
      */
     public function newCryptoKeyPair(): CryptoKeyPair {
 

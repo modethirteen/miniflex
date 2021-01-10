@@ -19,7 +19,6 @@ namespace modethirteen\Crypto;
 use gnupg;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
 use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
-use modethirteen\Crypto\Exception\NotSupportedException;
 use modethirteen\TypeEx\StringEx;
 
 class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
@@ -45,7 +44,6 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
      * {@inheritDoc}
      * @throws CryptoKeyFactoryCannotConstructCryptoKeyException
      * @throws CryptoKeyCannotParseCryptoKeyTextException
-     * @throws NotSupportedException
      */
     public function newCryptoKey() : CryptoKeyInterface {
         $key = new CryptoKey($this->text);
@@ -92,7 +90,7 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
                 // TODO (modethirteen, 20210109): use custom fingerprint algo in key fingerprints/digests, include expiration
                 return $key;
             default:
-                throw new NotSupportedException();
+                throw new CryptoKeyFactoryCannotConstructCryptoKeyException('unsupported key format ' . $key->getFormat());
         }
     }
 

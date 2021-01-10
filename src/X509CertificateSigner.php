@@ -16,9 +16,7 @@
  */
 namespace modethirteen\Crypto;
 
-use gnupg;
 use modethirteen\Crypto\Exception\CryptoKeySignerException;
-use modethirteen\TypeEx\StringEx;
 
 class X509CertificateSigner implements SignerInterface {
 

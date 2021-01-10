@@ -18,7 +18,6 @@ namespace modethirteen\Crypto;
 
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
 use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
-use modethirteen\Crypto\Exception\NotSupportedException;
 
 class ImportCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
 
@@ -51,7 +50,6 @@ class ImportCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
      * @TODO (modethirteen, 20200616): validate key/pair relationships
      * @throws CryptoKeyFactoryCannotConstructCryptoKeyException
      * @throws CryptoKeyCannotParseCryptoKeyTextException
-     * @throws NotSupportedException
      */
     public function newCryptoKeyPair(): CryptoKeyPair {
         return new CryptoKeyPair(
