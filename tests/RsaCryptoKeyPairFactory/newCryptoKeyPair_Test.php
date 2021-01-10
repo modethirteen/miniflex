@@ -18,8 +18,6 @@ namespace modethirteen\Crypto\Tests\RsaCryptoKeyPairFactory;
 
 use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
-use modethirteen\Crypto\Exception\NotSupportedException;
-use modethirteen\Crypto\ImportCryptoKeyPairFactory;
 use modethirteen\Crypto\RsaCryptoKeyPairFactory;
 use modethirteen\Crypto\Tests\AbstractCryptoTestCase;
 
@@ -45,7 +43,6 @@ class newCryptoKeyPair_Test extends AbstractCryptoTestCase {
      * @param string|null $algo
      * @throws CryptoKeyCannotParseCryptoKeyTextException
      * @throws CryptoKeyFactoryCannotConstructCryptoKeyException
-     * @throws NotSupportedException
      */
     public function Can_get_matching_RSA_key_pair(?int $bits, ?string $algo) : void {
 

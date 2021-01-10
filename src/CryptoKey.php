@@ -17,7 +17,6 @@
 namespace modethirteen\Crypto;
 
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
-use modethirteen\TypeEx\StringEx;
 
 class CryptoKey implements CryptoKeyInterface {
     const DIGEST_ALGORITHM = 'sha256';
@@ -68,7 +67,7 @@ class CryptoKey implements CryptoKeyInterface {
     /**
      * @var string
      */
-    private $normalized;
+    private $pem;
 
     /**
      * @var string|null
@@ -82,24 +81,23 @@ class CryptoKey implements CryptoKeyInterface {
 
     /**
      * @param string $text - PEM key text
+     * @param string|null $format - PEM key block format (default: infer from PEM key text)
      * @throws CryptoKeyCannotParseCryptoKeyTextException
      */
-    public function __construct(string $text) {
-        if(preg_match('/-----BEGIN (.+?)-----/', $text, $matches)) {
-            $this->format = isset($matches[1]) ? $matches[1] : null;
-        }
+    public function __construct(string $text, string $format = null) {
+        $x = ($format !== null ? new CryptoStringEx($text, $format) : new CryptoStringEx($text));
+        $this->format = $x->getFormat();
         if(!self::isSupportedCryptoKeyFormat($this->format)) {
             throw new CryptoKeyCannotParseCryptoKeyTextException('invalid key block format', $text);
         }
-        $text = str_replace(["\x0D", "\r", "\n"], '', $text);
-        if(!StringEx::isNullOrEmpty($text)) {
-            $text = preg_replace('/-----(BEGIN|END) .+?-----/', '', $text);
-            $text = str_replace(' ', '', $text);
-        }
-        $this->text = $text;
 
-        /** @noinspection PhpRedundantOptionalArgumentInspection */
-        $this->normalized =  "-----BEGIN {$this->format}-----\n" . chunk_split($this->text, 64, "\n") . "-----END {$this->format}-----\n";
+        // save trimmed text
+        $x = $x->trim();
+        $this->text = $x->toString();
+
+        // save PEM formatted text
+        $x = $x->pem();
+        $this->pem = $x->toString();
     }
 
     public function __toString() : string {
@@ -127,7 +125,7 @@ class CryptoKey implements CryptoKeyInterface {
     }
 
     public function toString() : string {
-        return $this->normalized;
+        return $this->pem;
     }
 
     public function toText() : string {

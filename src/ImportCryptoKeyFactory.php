@@ -29,12 +29,19 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
     private $algo = CryptoKey::DIGEST_ALGORITHM;
 
     /**
+     * PEM key block format (default: infer from PEM key text)
+     *
+     * @var string|null
+     */
+    private $format = null;
+
+    /**
      * @var string
      */
     private $text;
 
     /**
-     * @param string $text - generated PEM key text
+     * @param string $text - PEM key text
      */
     public function __construct(string $text) {
         $this->text = $text;
@@ -46,7 +53,7 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
      * @throws CryptoKeyCannotParseCryptoKeyTextException
      */
     public function newCryptoKey() : CryptoKeyInterface {
-        $key = new CryptoKey($this->text);
+        $key = $this->format !== null ? new CryptoKey($this->text, $this->format) : new CryptoKey($this->text);
         switch($key->getFormat()) {
             case CryptoKey::FORMAT_CERTIFICATE:
                 $certificate = openssl_x509_read($key->toString());
@@ -101,6 +108,16 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
     public function withDigestAlgorithm(string $algo) : object {
         $instance = clone $this;
         $instance->algo = $algo;
+        return $instance;
+    }
+
+    /**
+     * @param string $format
+     * @return static
+     */
+    public function withFormat(string $format) : object {
+        $instance = clone $this;
+        $instance->format = $format;
         return $instance;
     }
 }

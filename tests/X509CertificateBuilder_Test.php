@@ -19,7 +19,6 @@ namespace modethirteen\Crypto\Tests;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
 use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeySignerException;
-use modethirteen\Crypto\Exception\NotSupportedException;
 use modethirteen\Crypto\RsaCryptoKeyPairFactory;
 use modethirteen\Crypto\X509CertificateBuilder;
 
@@ -29,7 +28,6 @@ class X509CertificateBuilder_Test extends AbstractCryptoTestCase {
      * @test
      * @throws CryptoKeyCannotParseCryptoKeyTextException
      * @throws CryptoKeyFactoryCannotConstructCryptoKeyException
-     * @throws NotSupportedException
      * @throws CryptoKeySignerException
      */
     public function Can_build_and_sign_certificate() : void {

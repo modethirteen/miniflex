@@ -37,8 +37,8 @@ class ImportCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
     private $publicKeyText;
 
     /**
-     * @param string $privateKeyText - generated PEM private key text
-     * @param string $publicKeyText - generated PEM public key text
+     * @param string $privateKeyText - PEM private key text
+     * @param string $publicKeyText - PEM public key text
      */
     public function __construct(string $privateKeyText, string $publicKeyText) {
         $this->privateKeyText = $privateKeyText;

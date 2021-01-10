@@ -20,7 +20,6 @@ use gnupg;
 use modethirteen\Crypto\CryptoKey;
 use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
-use modethirteen\Crypto\Exception\NotSupportedException;
 use modethirteen\Crypto\ImportCryptoKeyFactory;
 use modethirteen\Crypto\ImportCryptoKeyPairFactory;
 use modethirteen\Crypto\Exception\CryptoKeySignerException;
@@ -33,7 +32,6 @@ class sign_Test extends AbstractCryptoTestCase {
      * @test
      * @throws CryptoKeyFactoryCannotConstructCryptoKeyException
      * @throws CryptoKeyCannotParseCryptoKeyTextException
-     * @throws NotSupportedException
      */
     public function Can_handle_no_PGP_fingerprint() : void {
 
@@ -56,7 +54,6 @@ class sign_Test extends AbstractCryptoTestCase {
      * @test
      * @throws CryptoKeyFactoryCannotConstructCryptoKeyException
      * @throws CryptoKeyCannotParseCryptoKeyTextException
-     * @throws NotSupportedException
      * @throws CryptoKeySignerException
      */
     public function Can_get_message_signed_with_private_pgp() : void {

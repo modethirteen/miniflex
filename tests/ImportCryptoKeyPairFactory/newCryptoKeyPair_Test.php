@@ -18,7 +18,6 @@ namespace modethirteen\Crypto\Tests\ImportCryptoKeyPairFactory;
 
 use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
-use modethirteen\Crypto\Exception\NotSupportedException;
 use modethirteen\Crypto\ImportCryptoKeyPairFactory;
 use modethirteen\Crypto\Tests\AbstractCryptoTestCase;
 
@@ -28,7 +27,6 @@ class newCryptoKeyPair_Test extends AbstractCryptoTestCase {
      * @test
      * @throws CryptoKeyFactoryCannotConstructCryptoKeyException
      * @throws CryptoKeyCannotParseCryptoKeyTextException
-     * @throws NotSupportedException
      */
     public function Can_get_RSA_key_pair() : void {
 
@@ -134,7 +132,6 @@ TEXT
      * @test
      * @throws CryptoKeyFactoryCannotConstructCryptoKeyException
      * @throws CryptoKeyCannotParseCryptoKeyTextException
-     * @throws NotSupportedException
      */
     public function Can_get_PGP_key_pair() : void {
 
