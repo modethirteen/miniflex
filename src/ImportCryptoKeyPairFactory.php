@@ -16,8 +16,10 @@
  */
 namespace modethirteen\Crypto;
 
+use Closure;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
 use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
+use modethirteen\Crypto\Exception\CryptoKeyFactoryMissingFormatException;
 
 class ImportCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
 
@@ -25,6 +27,11 @@ class ImportCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
      * @var string
      */
     private $algo = CryptoKey::DIGEST_ALGORITHM;
+
+    /**
+     * @var Closure
+     */
+    private $formatHandler;
 
     /**
      * @var string
@@ -37,12 +44,15 @@ class ImportCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
     private $publicKeyText;
 
     /**
-     * @param string $privateKeyText - PEM private key text
-     * @param string $publicKeyText - PEM public key text
+     * @param string $privateKeyText - PEM private key block
+     * @param string $publicKeyText - PEM public key block
      */
     public function __construct(string $privateKeyText, string $publicKeyText) {
         $this->privateKeyText = $privateKeyText;
         $this->publicKeyText = $publicKeyText;
+        $this->formatHandler = function(string $text) {
+            throw new CryptoKeyFactoryMissingFormatException($text);
+        };
     }
 
     /**
@@ -55,9 +65,11 @@ class ImportCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
         return new CryptoKeyPair(
             (new ImportCryptoKeyFactory($this->privateKeyText))
                 ->withDigestAlgorithm($this->algo)
+                ->withFormatHandler($this->formatHandler)
                 ->newCryptoKey(),
             (new ImportCryptoKeyFactory($this->publicKeyText))
                 ->withDigestAlgorithm($this->algo)
+                ->withFormatHandler($this->formatHandler)
                 ->newCryptoKey()
         );
     }
@@ -69,6 +81,16 @@ class ImportCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
     public function withDigestAlgorithm(string $algo) : object {
         $instance = clone $this;
         $instance->algo = $algo;
+        return $instance;
+    }
+
+    /**
+     * @param Closure $formatHandler - <$formatHandler(string $text) : string> : handle PEM key block format when unable to infer from PEM key block
+     * @return static
+     */
+    public function withFormatHandler(Closure $formatHandler) : object {
+        $instance = clone $this;
+        $instance->formatHandler = $formatHandler;
         return $instance;
     }
 }

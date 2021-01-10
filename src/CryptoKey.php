@@ -16,7 +16,9 @@
  */
 namespace modethirteen\Crypto;
 
+use Closure;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
+use modethirteen\TypeEx\StringEx;
 
 class CryptoKey implements CryptoKeyInterface {
     const DIGEST_ALGORITHM = 'sha256';
@@ -42,11 +44,51 @@ class CryptoKey implements CryptoKeyInterface {
     ];
 
     /**
-     * @param string $format - key block format (CERTIFICATE, PGP PUBLIC KEY BLOCK, ...)
+     * @param string $format - PEM key block format (CERTIFICATE, PGP PUBLIC KEY BLOCK, ...)
      * @return bool
      */
     public static function isSupportedCryptoKeyFormat(string $format) : bool {
         return in_array($format, self::$supportedFormats);
+    }
+
+
+    /**
+     * Add PEM headers and whitespace
+     *
+     * @param string $text - PEM key block with or without headers
+     * @param string $format - key block format (CERTIFICATE, PGP PUBLIC KEY BLOCK, ...)
+     * @return string
+     */
+    public static function pem(string $text, string $format) : string {
+        return self::_pem(self::trim($text), $format);
+    }
+
+    /**
+     * Remove PEM headers and whitespace
+     *
+     * @param string $text - PEM key block
+     * @return string
+     */
+    public static function trim(string $text) : string {
+        $text = str_replace(["\x0D", "\r", "\n"], '', $text);
+        if(!StringEx::isNullOrEmpty($text)) {
+            $text = preg_replace('/-----(BEGIN|END) .+?-----/', '', $text);
+            $text = str_replace(' ', '', $text);
+        }
+        return $text;
+    }
+
+    /**
+     * Add PEM headers and whitespace (internal helper skips trimming PEM key block)
+     *
+     * @param string $text - PEM key block without headers
+     * @param string $format - PEM key block format (CERTIFICATE, PGP PUBLIC KEY BLOCK, ...)
+     * @return string
+     */
+    private static function _pem(string $text, string $format) : string {
+
+        /** @noinspection PhpRedundantOptionalArgumentInspection */
+        return "-----BEGIN {$format}-----\n" . chunk_split($text, 64, "\n") . "-----END {$format}-----\n";
     }
 
     /**
@@ -80,24 +122,21 @@ class CryptoKey implements CryptoKeyInterface {
     private $text;
 
     /**
-     * @param string $text - PEM key text
-     * @param string|null $format - PEM key block format (default: infer from PEM key text)
+     * @param string $text - PEM key block
+     * @param Closure $formatHandler - <$formatHandler(string $text) : string> : handle PEM key block format when unable to infer from PEM key block
      * @throws CryptoKeyCannotParseCryptoKeyTextException
      */
-    public function __construct(string $text, string $format = null) {
-        $x = ($format !== null ? new CryptoStringEx($text, $format) : new CryptoStringEx($text));
-        $this->format = $x->getFormat();
+    public function __construct(string $text, Closure $formatHandler) {
+        if(preg_match('/-----BEGIN (.+?)-----/', $text, $matches)) {
+            $this->format = isset($matches[1]) ? $matches[1] : null;
+        } else {
+            $this->format = $formatHandler($text);
+        }
         if(!self::isSupportedCryptoKeyFormat($this->format)) {
             throw new CryptoKeyCannotParseCryptoKeyTextException('invalid key block format', $text);
         }
-
-        // save trimmed text
-        $x = $x->trim();
-        $this->text = $x->toString();
-
-        // save PEM formatted text
-        $x = $x->pem();
-        $this->pem = $x->toString();
+        $this->text = self::trim($text);
+        $this->pem = self::_pem($this->text, $this->format);
     }
 
     public function __toString() : string {

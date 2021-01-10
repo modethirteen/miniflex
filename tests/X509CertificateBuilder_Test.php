@@ -19,7 +19,7 @@ namespace modethirteen\Crypto\Tests;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
 use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeySignerException;
-use modethirteen\Crypto\RsaCryptoKeyPairFactory;
+use modethirteen\Crypto\RsaPkcs8CryptoKeyPairFactory;
 use modethirteen\Crypto\X509CertificateBuilder;
 
 class X509CertificateBuilder_Test extends AbstractCryptoTestCase {
@@ -33,7 +33,7 @@ class X509CertificateBuilder_Test extends AbstractCryptoTestCase {
     public function Can_build_and_sign_certificate() : void {
 
         // arrange
-        $pair = (new RsaCryptoKeyPairFactory())->newCryptoKeyPair();
+        $pair = (new RsaPkcs8CryptoKeyPairFactory())->newCryptoKeyPair();
         $builder = new X509CertificateBuilder($pair->getPrivateKey());
 
         // act

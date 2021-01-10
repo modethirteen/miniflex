@@ -17,12 +17,10 @@
 namespace modethirteen\Crypto\Tests\ImportCryptoKeyFactory;
 
 use modethirteen\Crypto\CryptoKey;
-use modethirteen\Crypto\CryptoStringEx;
-use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
+use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\ImportCryptoKeyFactory;
 use modethirteen\Crypto\Tests\AbstractCryptoTestCase;
-use modethirteen\TypeEx\StringEx;
 
 class newCryptoKey_Test extends AbstractCryptoTestCase {
 
@@ -31,8 +29,44 @@ class newCryptoKey_Test extends AbstractCryptoTestCase {
      */
     public static function text_format_algo_expectedFormat_expectedFingerprint_expectedExpiration_expectedName_Provider() : array {
         return [
-            'RSA private key' => [
-                self::getRsaPrivateKeyText(),
+            'RSA PKCS #1 private key' => [
+                self::getRsaPkcs1PrivateKeyText(),
+                null,
+                null,
+                CryptoKey::FORMAT_RSA_PRIVATE_KEY,
+                null,
+                null,
+                null
+            ],
+            'RSA PKCS #1 private key without header' => [
+                CryptoKey::trim(self::getRsaPkcs1PrivateKeyText()),
+                CryptoKey::FORMAT_RSA_PRIVATE_KEY,
+                null,
+                CryptoKey::FORMAT_RSA_PRIVATE_KEY,
+                null,
+                null,
+                null
+            ],
+            'RSA PKCS #1 public key' => [
+                self::getRsaPkcs1PublicKeyText(),
+                null,
+                null,
+                CryptoKey::FORMAT_RSA_PUBLIC_KEY,
+                null,
+                null,
+                null
+            ],
+            'RSA PKCS #1 public key without header' => [
+                CryptoKey::trim(self::getRsaPkcs1PublicKeyText()),
+                CryptoKey::FORMAT_RSA_PUBLIC_KEY,
+                null,
+                CryptoKey::FORMAT_RSA_PUBLIC_KEY,
+                null,
+                null,
+                null
+            ],
+            'RSA PKCS #8 private key' => [
+                self::getRsaPkcs8PrivateKeyText(),
                 null,
                 null,
                 CryptoKey::FORMAT_PRIVATE_KEY,
@@ -40,8 +74,8 @@ class newCryptoKey_Test extends AbstractCryptoTestCase {
                 null,
                 null
             ],
-            'RSA private key without header' => [
-                (new CryptoStringEx(self::getRsaPrivateKeyText()))->trim()->toString(),
+            'RSA PKCS #8 private key without header' => [
+                CryptoKey::trim(self::getRsaPkcs8PrivateKeyText()),
                 CryptoKey::FORMAT_PRIVATE_KEY,
                 null,
                 CryptoKey::FORMAT_PRIVATE_KEY,
@@ -49,8 +83,8 @@ class newCryptoKey_Test extends AbstractCryptoTestCase {
                 null,
                 null
             ],
-            'RSA public key' => [
-                self::getRsaPublicKeyText(),
+            'RSA PKCS #8 public key' => [
+                self::getRsaPkcs8PublicKeyText(),
                 null,
                 null,
                 CryptoKey::FORMAT_PUBLIC_KEY,
@@ -58,8 +92,8 @@ class newCryptoKey_Test extends AbstractCryptoTestCase {
                 null,
                 null
             ],
-            'RSA public key without header' => [
-                (new CryptoStringEx(self::getRsaPublicKeyText()))->trim()->toString(),
+            'RSA PKCS #8 public key without header' => [
+                CryptoKey::trim(self::getRsaPkcs8PublicKeyText()),
                 CryptoKey::FORMAT_PUBLIC_KEY,
                 null,
                 CryptoKey::FORMAT_PUBLIC_KEY,
@@ -77,7 +111,7 @@ class newCryptoKey_Test extends AbstractCryptoTestCase {
                 null
             ],
             'PGP private key without header' => [
-                (new CryptoStringEx(self::getPgpPrivateKeyText()))->trim()->toString(),
+                CryptoKey::trim(self::getPgpPrivateKeyText()),
                 CryptoKey::FORMAT_PGP_PRIVATE_KEY_BLOCK,
                 null,
                 CryptoKey::FORMAT_PGP_PRIVATE_KEY_BLOCK,
@@ -95,7 +129,7 @@ class newCryptoKey_Test extends AbstractCryptoTestCase {
                 null
             ],
             'PGP public key without header' => [
-                (new CryptoStringEx(self::getPgpPublicKeyText()))->trim()->toString(),
+                CryptoKey::trim(self::getPgpPublicKeyText()),
                 CryptoKey::FORMAT_PGP_PUBLIC_KEY_BLOCK,
                 null,
                 CryptoKey::FORMAT_PGP_PUBLIC_KEY_BLOCK,
@@ -113,7 +147,7 @@ class newCryptoKey_Test extends AbstractCryptoTestCase {
                 '_C=CA_ST=xyzzy_L=plugh_O=foo_OU=bar_CN=baz_emailAddress=qux@example.com'
             ],
             'x.509 certificate without header' => [
-                (new CryptoStringEx(self::getX509CertificateKeyText()))->trim()->toString(),
+                CryptoKey::trim(self::getX509CertificateKeyText()),
                 CryptoKey::FORMAT_CERTIFICATE,
                 null,
                 CryptoKey::FORMAT_CERTIFICATE,
@@ -159,7 +193,9 @@ class newCryptoKey_Test extends AbstractCryptoTestCase {
         // arrange
         $factory = new ImportCryptoKeyFactory($text);
         if($format !== null) {
-            $factory = $factory->withFormat($format);
+            $factory = $factory->withFormatHandler(function() use ($format) : string {
+                return $format;
+            });
         }
         if($algo !== null) {
             $factory = $factory->withDigestAlgorithm($algo);
@@ -169,9 +205,8 @@ class newCryptoKey_Test extends AbstractCryptoTestCase {
         $key = $factory->newCryptoKey();
 
         // assert
-        $x = new CryptoStringEx($text, $key->getFormat());
-        static::assertEquals($x->trim()->toString(), $key->toText());
-        static::assertEquals($x->pem()->toString(), $key->toString());
+        static::assertEquals(CryptoKey::trim($text), $key->toText());
+        static::assertEquals(CryptoKey::pem($text, $key->getFormat()), $key->toString());
         static::assertEquals($expectedFormat, $key->getFormat());
         static::assertEquals($expectedFingerprint, $key->getFingerprint());
         static::assertEquals($expectedExpiration, $key->getExpiration());

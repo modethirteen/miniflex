@@ -126,7 +126,59 @@ TEXT;
     /**
      * @return string
      */
-    protected static function getRsaPrivateKeyText() : string {
+    protected static function getRsaPkcs1PrivateKeyText() : string {
+        return <<<TEXT
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAurdTApgsZh8PC1DbQxEBnxrDzBTE9omRugkImr3CFVQa62tH
+ayfoFgYl1SoBTkRfEdzSW30mpjV+c8QZuVHUJkPWenjJTQyPMHtdIgiKSp5g5m29
+tLrG+xLpAY6QiMJDACCOMbidmSO7YXYxrBTdpE14Y2bDG+bOqtHcFaC8xdz60NVu
+QYptF7QxDJqDkBCOt2q6vKI5L6wD/qjPJDFd00htEiFak3ANP9Z1J7YAD2lQWmbh
+80UQASpTBGk+tdk+9A7u1ib0UVrDSJVYGHszKeBG5rfiC93XF7j1XQY8yk9nMXpj
+5ZDkh3rs/Q7cB7DOPR+1fwB2Ow/mPBNkoLmQKQIDAQABAoIBAFdeNN9/6TaXzehT
+m2WUbZfPZFL4XPmngaL1WytdI5XrVvVVq4N+luDHW6iVEStYXsvy8hORSiZ33YW5
++vd2TLjjAVcpcbg16kKbVwb3zA4CcgEg1KXeyADv5kuuM/9qNwO2OBMX+daQm7uN
+HM0SrmuVPIH2sdE6fPX9YOhV4D8My+ynBt09HEcotC3lAFeokJt4IF9ujycDmF/g
+r33TXtDwUdak9iW0iaGP9eLF7zcwC8WWcJ32mFYlxy3j7Gba64gHEjEHNk8eXIhX
+YvKEESLV9odIotmFiFM0dKFoko/jTHHGiQiYW/mAvBJlOtey3Q4DxdMaA2iICE7c
+kYEqk0kCgYEA9YGjUGj0mWgNj9PDxoeO+Eh/ZIX1NiItJ93vQI8vUxZHquQdJ1Tg
+GSgwHMJ6BMIXmAgPb9b+vQlE4ic/+bwK4RArfAKGT2/V77i2Pp5wgrJ/xlzHU8Jv
+F7mn/KoTQmMXnvmLPnp5frWpE4AUh+qf/uVx77eWGrO6Gi445GkdJS8CgYEAwrJl
+QrEh/nWGHIinEb5I60yArxcURZtJ3zAGtupViIpJpZaPZ6oP7xl01FtzskOojEfW
+iLrtQ9otJ+e0Mc1iOTN9c2S80Na6RfUMzW1ca1IRoqv5Hqftye4L1Jp2daH0pQfx
+DzhKXaxQhpmIqyAbVr1mlQTxDoWnTM5rBLxX+icCgYBXPBxCuziGthFzlMSQ66Qi
+luglWPAbryMqclLMNtSTCmymzW2Khz8l0UDfRz9CJ5FopRyPGe7kTsHaNiYmX+nh
+tPQumVsOKOf0yUaAk53Y4wJCAr+VBJai8IY/YlN7mGhRRcxzg+Nd4cDVPAKPlRAK
+646DplFA5bHwEZKHns4LYwKBgEGWEPB3dSkf8+6Wxhj/Dddd7ReOYcDU//yUVB64
+L9oQI6EJaAOW0UlNPQLwT7gkfJnM9WMX/SdXTtDbh+Mi+cylIMSHkeeT/ink08w7
+498vRUuUPRZroXndm9Sht/gGd8BEPZtP7hVCH9pHzDdBWJROt0jJ4l5u/Z2tB3YP
+8F8PAoGAUqBAFLZ6OY0X/euuQoENG858/CgDVscixTe3kq8nkHcuBxCUcElDRSIa
+ecyMycXKHjnWqC0JkGy6rkd+MbxzxZhcVXWTe3mtJIcPfIGp2/4n7T0unzxWufU4
+Pujp5GyUREc4Za27lnpDvf4Fe5IUgw/YY7vgbbr47IZl7oFkHhQ=
+-----END RSA PRIVATE KEY-----
+TEXT;
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getRsaPkcs1PublicKeyText() : string {
+        return <<<TEXT
+-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEAurdTApgsZh8PC1DbQxEBnxrDzBTE9omRugkImr3CFVQa62tHayfo
+FgYl1SoBTkRfEdzSW30mpjV+c8QZuVHUJkPWenjJTQyPMHtdIgiKSp5g5m29tLrG
++xLpAY6QiMJDACCOMbidmSO7YXYxrBTdpE14Y2bDG+bOqtHcFaC8xdz60NVuQYpt
+F7QxDJqDkBCOt2q6vKI5L6wD/qjPJDFd00htEiFak3ANP9Z1J7YAD2lQWmbh80UQ
+ASpTBGk+tdk+9A7u1ib0UVrDSJVYGHszKeBG5rfiC93XF7j1XQY8yk9nMXpj5ZDk
+h3rs/Q7cB7DOPR+1fwB2Ow/mPBNkoLmQKQIDAQAB
+-----END RSA PUBLIC KEY-----
+TEXT;
+
+    }
+
+    /**
+     * @return string
+     */
+    protected static function getRsaPkcs8PrivateKeyText() : string {
         return <<<TEXT
 -----BEGIN PRIVATE KEY-----
 MIIJQgIBADANBgkqhkiG9w0BAQEFAASCCSwwggkoAgEAAoICAQDSolBIIA70gXik
@@ -186,7 +238,7 @@ TEXT;
     /**
      * @return string
      */
-    protected static function getRsaPublicKeyText() : string {
+    protected static function getRsaPkcs8PublicKeyText() : string {
         return <<<TEXT
 -----BEGIN PUBLIC KEY-----
 MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA0qJQSCAO9IF4pPa4r0Kk

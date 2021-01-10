@@ -16,9 +16,11 @@
  */
 namespace modethirteen\Crypto;
 
+use Closure;
 use gnupg;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
 use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
+use modethirteen\Crypto\Exception\CryptoKeyFactoryMissingFormatException;
 use modethirteen\TypeEx\StringEx;
 
 class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
@@ -29,11 +31,9 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
     private $algo = CryptoKey::DIGEST_ALGORITHM;
 
     /**
-     * PEM key block format (default: infer from PEM key text)
-     *
-     * @var string|null
+     * @var Closure
      */
-    private $format = null;
+    private $formatHandler;
 
     /**
      * @var string
@@ -41,10 +41,13 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
     private $text;
 
     /**
-     * @param string $text - PEM key text
+     * @param string $text - PEM key block
      */
     public function __construct(string $text) {
         $this->text = $text;
+        $this->formatHandler = function(string $text) {
+            throw new CryptoKeyFactoryMissingFormatException($text);
+        };
     }
 
     /**
@@ -53,12 +56,12 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
      * @throws CryptoKeyCannotParseCryptoKeyTextException
      */
     public function newCryptoKey() : CryptoKeyInterface {
-        $key = $this->format !== null ? new CryptoKey($this->text, $this->format) : new CryptoKey($this->text);
+        $key = new CryptoKey($this->text, $this->formatHandler);
         switch($key->getFormat()) {
             case CryptoKey::FORMAT_CERTIFICATE:
                 $certificate = openssl_x509_read($key->toString());
                 if($certificate === false) {
-                    throw new CryptoKeyFactoryCannotConstructCryptoKeyException('cryptographic key text could not be imported as an x.509 certificate');
+                    throw new CryptoKeyFactoryCannotConstructCryptoKeyException('cryptographic key block could not be imported as an x.509 certificate');
                 }
                 $data = openssl_x509_parse($certificate);
                 $data = is_array($data) ? $data : [];
@@ -83,7 +86,7 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
                 // TODO (modethirteen, 20200616): use custom fingerprint algo in key fingerprints/digests, include expiration
                 $data = (new gnupg())->import($key->toString());
                 if(!is_array($data)) {
-                    throw new CryptoKeyFactoryCannotConstructCryptoKeyException('cryptographic key text could not be imported as GPG/PGP');
+                    throw new CryptoKeyFactoryCannotConstructCryptoKeyException('cryptographic key block could not be imported as GPG/PGP');
                 }
                 if(isset($data['fingerprint'])) {
                     $key = $key->withFingerprint($data['fingerprint']);
@@ -94,7 +97,7 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
             case CryptoKey::FORMAT_RSA_PRIVATE_KEY:
             case CryptoKey::FORMAT_RSA_PUBLIC_KEY:
 
-                // TODO (modethirteen, 20210109): use custom fingerprint algo in key fingerprints/digests, include expiration
+                // TODO (modethirteen, 20210109): use custom fingerprint algo in key fingerprints/digests, include expiration, differentiate between PKCS#1 and PCKS#8
                 return $key;
             default:
                 throw new CryptoKeyFactoryCannotConstructCryptoKeyException('unsupported key format ' . $key->getFormat());
@@ -112,12 +115,12 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
     }
 
     /**
-     * @param string $format
+     * @param Closure $formatHandler - <$formatHandler(string $text) : string> : handle PEM key block format when unable to infer from PEM key block
      * @return static
      */
-    public function withFormat(string $format) : object {
+    public function withFormatHandler(Closure $formatHandler) : object {
         $instance = clone $this;
-        $instance->format = $format;
+        $instance->formatHandler = $formatHandler;
         return $instance;
     }
 }

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\Crypto\Tests\RsaCryptoKeyPairFactory;
+namespace modethirteen\Crypto\Tests\RsaPkcs8CryptoKeyPairFactory;
 
-use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
-use modethirteen\Crypto\RsaCryptoKeyPairFactory;
+use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
+use modethirteen\Crypto\RsaPkcs8CryptoKeyPairFactory;
 use modethirteen\Crypto\Tests\AbstractCryptoTestCase;
 
 class newCryptoKeyPair_Test extends AbstractCryptoTestCase {
@@ -47,7 +47,7 @@ class newCryptoKeyPair_Test extends AbstractCryptoTestCase {
     public function Can_get_matching_RSA_key_pair(?int $bits, ?string $algo) : void {
 
         // arrange
-        $factory = new RsaCryptoKeyPairFactory();
+        $factory = new RsaPkcs8CryptoKeyPairFactory();
         if($bits !== null) {
             $factory = $factory->withCryptoKeyLength($bits);
         }

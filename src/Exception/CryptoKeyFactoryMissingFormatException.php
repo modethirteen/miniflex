@@ -16,14 +16,7 @@
  */
 namespace modethirteen\Crypto\Exception;
 
-use Exception;
-
-class CryptoKeyCannotParseCryptoKeyTextException extends Exception {
-
-    /**
-     * @var string
-     */
-    private $error;
+class CryptoKeyFactoryMissingFormatException extends CryptoKeyFactoryCannotConstructCryptoKeyException {
 
     /**
      * @var string
@@ -31,26 +24,14 @@ class CryptoKeyCannotParseCryptoKeyTextException extends Exception {
     private $text;
 
     /**
-     * @param string $error - the specific error or reason the key pair cannot be instantiated
-     * @param string $text
+     * @param string $text - PEM key block
      */
-    public function __construct(string $error, string $text) {
-        parent::__construct("Cannot parse cryptographic key block, {$error}");
-        $this->error = $error;
+    public function __construct(string $text) {
+        parent::__construct('cannot infer format from PEM key block headers');
         $this->text = $text;
     }
 
-    /**
-     * @return string
-     */
-    public function getError() : string {
-        return $this->error;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCryptoKeyText() : string {
+    public function getText() : string {
         return $this->text;
     }
 }

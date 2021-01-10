@@ -16,10 +16,10 @@
  */
 namespace modethirteen\Crypto;
 
-use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
+use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 
-class RsaCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
+class RsaPkcs8CryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
 
     /**
      * @var string

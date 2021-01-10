@@ -18,11 +18,11 @@ namespace modethirteen\Crypto\Tests\PgpMessageSigner;
 
 use gnupg;
 use modethirteen\Crypto\CryptoKey;
-use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
+use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
+use modethirteen\Crypto\Exception\CryptoKeySignerException;
 use modethirteen\Crypto\ImportCryptoKeyFactory;
 use modethirteen\Crypto\ImportCryptoKeyPairFactory;
-use modethirteen\Crypto\Exception\CryptoKeySignerException;
 use modethirteen\Crypto\PgpMessageSigner;
 use modethirteen\Crypto\Tests\AbstractCryptoTestCase;
 

@@ -16,8 +16,8 @@
  */
 namespace modethirteen\Crypto\Tests\ImportCryptoKeyPairFactory;
 
-use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\Exception\CryptoKeyCannotParseCryptoKeyTextException;
+use modethirteen\Crypto\Exception\CryptoKeyFactoryCannotConstructCryptoKeyException;
 use modethirteen\Crypto\ImportCryptoKeyPairFactory;
 use modethirteen\Crypto\Tests\AbstractCryptoTestCase;
 
@@ -32,8 +32,8 @@ class newCryptoKeyPair_Test extends AbstractCryptoTestCase {
 
         // arrange
         $factory = new ImportCryptoKeyPairFactory(
-            self::getRsaPrivateKeyText(),
-            self::getRsaPublicKeyText()
+            self::getRsaPkcs8PrivateKeyText(),
+            self::getRsaPkcs8PublicKeyText()
         );
 
         // act
