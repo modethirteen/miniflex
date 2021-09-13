@@ -21,12 +21,12 @@ class CryptoKeyPair {
     /**
      * @var CryptoKeyInterface
      */
-    private $privateKey;
+    private CryptoKeyInterface $privateKey;
 
     /**
      * @var CryptoKeyInterface
      */
-    private $publicKey;
+    private CryptoKeyInterface $publicKey;
 
     /**
      * @param CryptoKeyInterface $privateKey

@@ -25,12 +25,12 @@ class PgpMessageSigner implements SignerInterface {
     /**
      * @var CryptoKeyInterface
      */
-    private $key;
+    private CryptoKeyInterface $key;
 
     /**
      * @var string
      */
-    private $message;
+    private string $message;
 
     /**
      * @param CryptoKeyInterface $key - PGP private key

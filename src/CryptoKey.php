@@ -33,7 +33,7 @@ class CryptoKey implements CryptoKeyInterface {
     /**
      * @var string[]
      */
-    private static $supportedFormats = [
+    private static array $supportedFormats = [
         self::FORMAT_CERTIFICATE,
         self::FORMAT_PGP_PRIVATE_KEY_BLOCK,
         self::FORMAT_PGP_PUBLIC_KEY_BLOCK,

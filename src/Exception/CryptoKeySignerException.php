@@ -24,7 +24,7 @@ class CryptoKeySignerException extends Exception {
     /**
      * @var CryptoKeyInterface
      */
-    private $key;
+    private CryptoKeyInterface $key;
 
     /**
      * @param CryptoKeyInterface $key

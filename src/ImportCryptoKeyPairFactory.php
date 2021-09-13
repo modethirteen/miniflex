@@ -26,22 +26,22 @@ class ImportCryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
     /**
      * @var string
      */
-    private $algo = CryptoKey::DIGEST_ALGORITHM;
+    private string $algo = CryptoKey::DIGEST_ALGORITHM;
 
     /**
      * @var Closure
      */
-    private $formatHandler;
+    private Closure $formatHandler;
 
     /**
      * @var string
      */
-    private $privateKeyText;
+    private string $privateKeyText;
 
     /**
      * @var string
      */
-    private $publicKeyText;
+    private string $publicKeyText;
 
     /**
      * @param string $privateKeyText - PEM private key block

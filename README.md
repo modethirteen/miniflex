@@ -13,7 +13,7 @@ A collection of PHP components to manage cryptographic keys and signatures
 
 ## Requirements
 
-* PHP 7.2, 7.3, 7.4 (main, 0.x)
+* PHP 7.4 (main, 1.x)
 
 ## Installation
 

@@ -23,7 +23,7 @@ class CryptoKeyFactoryCannotConstructCryptoKeyException extends Exception {
     /**
      * @var string
      */
-    private $error;
+    private string $error;
 
     /**
      * @param string $error - the specific error or reason the key pair cannot be instantiated

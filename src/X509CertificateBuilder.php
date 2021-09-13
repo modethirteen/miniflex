@@ -25,22 +25,22 @@ class X509CertificateBuilder {
     /**
      * @var string
      */
-    private $algo = CryptoKey::DIGEST_ALGORITHM;
+    private string $algo = CryptoKey::DIGEST_ALGORITHM;
 
     /**
      * @var array<string, string>
      */
-    private $data = [];
+    private array $data = [];
 
     /**
      * @var int
      */
-    private $days = 365;
+    private int $days = 365;
 
     /**
      * @var X509CertificateSigner
      */
-    private $signature;
+    private X509CertificateSigner $signature;
 
     /**
      * @param CryptoKeyInterface $privateKey - RSA private signing key

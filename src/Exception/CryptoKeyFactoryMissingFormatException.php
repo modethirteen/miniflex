@@ -21,7 +21,7 @@ class CryptoKeyFactoryMissingFormatException extends CryptoKeyFactoryCannotConst
     /**
      * @var string
      */
-    private $text;
+    private string $text;
 
     /**
      * @param string $text - PEM key block

@@ -175,7 +175,7 @@ class newCryptoKey_Test extends AbstractCryptoTestCase {
      * @param string|null $algo
      * @param string $expectedFormat
      * @param string|null $expectedFingerprint
-     * @param string|null $expectedExpiration
+     * @param int|null $expectedExpiration
      * @param string|null $expectedName
      * @throws CryptoKeyCannotParseCryptoKeyTextException
      * @throws CryptoKeyFactoryCannotConstructCryptoKeyException
@@ -186,7 +186,7 @@ class newCryptoKey_Test extends AbstractCryptoTestCase {
         ?string $algo,
         string $expectedFormat,
         ?string $expectedFingerprint,
-        ?string $expectedExpiration,
+        ?int $expectedExpiration,
         ?string $expectedName
     ) : void {
 

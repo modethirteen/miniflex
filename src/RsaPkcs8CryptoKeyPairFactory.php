@@ -24,12 +24,12 @@ class RsaPkcs8CryptoKeyPairFactory implements CryptoKeyPairFactoryInterface {
     /**
      * @var string
      */
-    private $algo = CryptoKey::DIGEST_ALGORITHM;
+    private string $algo = CryptoKey::DIGEST_ALGORITHM;
 
     /**
      * @var int
      */
-    private $bits = 4096;
+    private int $bits = 4096;
 
     /**
      * {@inheritDoc}

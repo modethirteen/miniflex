@@ -56,6 +56,6 @@ class X509CertificateBuilder_Test extends AbstractCryptoTestCase {
         );
         static::assertEquals('CERTIFICATE', $certificate->getFormat());
         static::assertEquals('_CN=foo_C=CA_L=bar_OU=qux_O=xyzzy_ST=plugh_emailAddress=fred@example.com', $certificate->getName());
-        static::assertInternalType('int', $certificate->getExpiration());
+        static::assertIsInt($certificate->getExpiration());
     }
 }

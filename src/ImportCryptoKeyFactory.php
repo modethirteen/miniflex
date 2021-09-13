@@ -28,17 +28,17 @@ class ImportCryptoKeyFactory implements CryptoKeyFactoryInterface {
     /**
      * @var string
      */
-    private $algo = CryptoKey::DIGEST_ALGORITHM;
+    private string $algo = CryptoKey::DIGEST_ALGORITHM;
 
     /**
      * @var Closure
      */
-    private $formatHandler;
+    private Closure $formatHandler;
 
     /**
      * @var string
      */
-    private $text;
+    private string $text;
 
     /**
      * @param string $text - PEM key block

@@ -23,17 +23,17 @@ class X509CertificateSigner implements SignerInterface {
     /**
      * @var string
      */
-    private $algo;
+    private string $algo;
 
     /**
      * @var CryptoKeyInterface
      */
-    private $privateKey;
+    private CryptoKeyInterface $privateKey;
 
     /**
      * @var X509CertificateBuilder
      */
-    private $x509;
+    private X509CertificateBuilder $x509;
 
     /**
      * @param CryptoKeyInterface $privateKey - RSA private signing key

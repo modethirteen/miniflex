@@ -23,12 +23,12 @@ class CryptoKeyCannotParseCryptoKeyTextException extends Exception {
     /**
      * @var string
      */
-    private $error;
+    private string $error;
 
     /**
      * @var string
      */
-    private $text;
+    private string $text;
 
     /**
      * @param string $error - the specific error or reason the key pair cannot be instantiated
